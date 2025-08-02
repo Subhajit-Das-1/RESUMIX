@@ -243,16 +243,15 @@ const ResumePreview = () => {
         isDownloading={isDownloading}
         isPrinting={isPrinting}
       />
-      <div ref={resumeViewerRef}>
-        <ResumeViewer
-          resumeData={resumeData}
-          selectedTemplate={selectedTemplate}
-          onTemplateChange={handleTemplateChange}
-          zoomLevel={zoomLevel}
-          onZoomChange={handleZoomChange}
-          isPrintMode={isPrinting}
-        />
-      </div>
+      <ResumeViewer
+        ref={resumeViewerRef}
+        resumeData={resumeData}
+        selectedTemplate={selectedTemplate}
+        onTemplateChange={handleTemplateChange}
+        zoomLevel={zoomLevel}
+        onZoomChange={handleZoomChange}
+        isPrintMode={isPrinting}
+      />
       {/* Print-only version */}
       <div className="print-only hidden">
         <ResumeViewer

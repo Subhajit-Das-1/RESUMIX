@@ -1,15 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import Button from '../../../components/ui/Button';
 
 
-const ResumeViewer = ({ 
+const ResumeViewer = forwardRef(({ 
   resumeData, 
   selectedTemplate = 'modern',
   onTemplateChange,
   zoomLevel = 100,
   onZoomChange,
   isPrintMode = false 
-}) => {
+}, ref) => {
   const viewerRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -348,7 +348,7 @@ const ResumeViewer = ({
   }
 
   return (
-    <div className="flex-1 bg-gray-100 overflow-hidden">
+    <div ref={ref} className="flex-1 bg-gray-100 overflow-hidden">
       {/* Zoom Controls */}
       {!isFullscreen && (
         <div className="bg-white border-b border-gray-200 px-4 py-2">
@@ -419,6 +419,6 @@ const ResumeViewer = ({
       </div>
     </div>
   );
-};
+});
 
 export default ResumeViewer;

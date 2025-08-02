@@ -30,7 +30,29 @@ export const generatePDF = async (elementRef, filename = 'resume.pdf') => {
     }
 
     // Find the actual resume content within the container
-    const resumeContent = element.querySelector('.bg-white') || element;
+    let resumeContent = element.querySelector('.bg-white');
+    
+    // If not found, try other selectors
+    if (!resumeContent) {
+      resumeContent = element.querySelector('[style*="transform"]');
+    }
+    
+    // If still not found, try to find any div with resume content
+    if (!resumeContent) {
+      resumeContent = element.querySelector('div[class*="bg-white"]') || element;
+    }
+    
+    // If still not found, use the entire element
+    if (!resumeContent) {
+      resumeContent = element;
+    }
+    
+    // Debug: log what we found
+    console.log('Resume content found:', resumeContent);
+    console.log('Resume content HTML:', resumeContent?.outerHTML);
+    
+    // Wait for content to be fully rendered
+    await new Promise(resolve => setTimeout(resolve, 500));
     
     // Configure html2canvas options for better quality
     const canvas = await html2canvas(resumeContent, {
