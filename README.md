@@ -2,6 +2,12 @@
 
 A modern and professional resume builder web application built with React.js, Framer Motion for animations, and styled with TailwindCSS. Users can fill forms, preview styled resume templates, and download printable PDFs.
 
+## 🌐 Live Demo
+
+**🚀 [Live Application](https://resumix-29cb.vercel.app/)**
+
+Experience RESUMIX in action! Create professional resumes with our intuitive builder.
+
 ## 🚀 Features
 
 - **Professional Resume Builder** - Create stunning resumes with step-by-step form
