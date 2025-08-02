@@ -5,7 +5,7 @@ import PreviewHeader from './components/PreviewHeader';
 import ResumeViewer from './components/ResumeViewer';
 import LoadingState from './components/LoadingState';
 import EmptyState from './components/EmptyState';
-import { generatePDF } from '../../utils/pdfGenerator';
+import { generatePDF, generatePDFFromResumeData } from '../../utils/pdfGenerator';
 
 const ResumePreview = () => {
   const [resumeData, setResumeData] = useState(null);
