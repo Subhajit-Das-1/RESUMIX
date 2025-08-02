@@ -50,12 +50,30 @@ export const generatePDF = async (elementRef, filename = 'resume.pdf') => {
     // Debug: log what we found
     console.log('Resume content found:', resumeContent);
     console.log('Resume content HTML:', resumeContent?.outerHTML);
+    console.log('Element children:', element.children);
+    
+    // Try to find the resume content more specifically
+    const allDivs = element.querySelectorAll('div');
+    console.log('All divs found:', allDivs.length);
+    allDivs.forEach((div, index) => {
+      console.log(`Div ${index}:`, div.className, div.textContent?.substring(0, 50));
+    });
     
     // Wait for content to be fully rendered
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Create a clone of the resume content to avoid styling issues
+    const clonedContent = resumeContent.cloneNode(true);
+    clonedContent.style.position = 'absolute';
+    clonedContent.style.left = '-9999px';
+    clonedContent.style.top = '0';
+    clonedContent.style.transform = 'none'; // Remove any transforms
+    clonedContent.style.width = '800px';
+    clonedContent.style.backgroundColor = '#ffffff';
+    document.body.appendChild(clonedContent);
     
     // Configure html2canvas options for better quality
-    const canvas = await html2canvas(resumeContent, {
+    const canvas = await html2canvas(clonedContent, {
       scale: 2, // Higher scale for better quality
       useCORS: true,
       allowTaint: true,
@@ -64,8 +82,10 @@ export const generatePDF = async (elementRef, filename = 'resume.pdf') => {
       height: resumeContent.scrollHeight || 1000,
       scrollX: 0,
       scrollY: 0,
-      logging: false,
+      logging: true, // Enable logging to debug
       removeContainer: false,
+      foreignObjectRendering: true,
+      imageTimeout: 0,
     });
 
     // Create PDF with A4 dimensions
@@ -89,6 +109,9 @@ export const generatePDF = async (elementRef, filename = 'resume.pdf') => {
       heightLeft -= pageHeight;
     }
 
+    // Clean up the cloned content
+    document.body.removeChild(clonedContent);
+    
     // Save the PDF
     pdf.save(filename);
     
