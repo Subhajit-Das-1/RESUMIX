@@ -62,24 +62,18 @@ export const generatePDF = async (elementRef, filename = 'resume.pdf') => {
     // Wait for content to be fully rendered
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    // Create a clone of the resume content to avoid styling issues
-    const clonedContent = resumeContent.cloneNode(true);
-    clonedContent.style.position = 'absolute';
-    clonedContent.style.left = '-9999px';
-    clonedContent.style.top = '0';
-    clonedContent.style.transform = 'none'; // Remove any transforms
-    clonedContent.style.width = '800px';
-    clonedContent.style.backgroundColor = '#ffffff';
-    document.body.appendChild(clonedContent);
+    // Try to capture the original element directly
+    console.log('Attempting to capture resume content...');
+    console.log('Resume content dimensions:', resumeContent.scrollWidth, 'x', resumeContent.scrollHeight);
     
-    // Configure html2canvas options for better quality
-    const canvas = await html2canvas(clonedContent, {
+        // Configure html2canvas options for better quality
+    const canvas = await html2canvas(resumeContent, {
       scale: 2, // Higher scale for better quality
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',
       width: resumeContent.scrollWidth || 800,
-      height: resumeContent.scrollHeight || 1000,
+      height: resumeContent.scrollHeight || 1200,
       scrollX: 0,
       scrollY: 0,
       logging: true, // Enable logging to debug
@@ -87,6 +81,9 @@ export const generatePDF = async (elementRef, filename = 'resume.pdf') => {
       foreignObjectRendering: true,
       imageTimeout: 0,
     });
+    
+    console.log('Canvas created successfully:', canvas);
+    console.log('Canvas dimensions:', canvas.width, 'x', canvas.height);
 
     // Create PDF with A4 dimensions
     const pdf = new jsPDF('p', 'pt', 'a4');
@@ -109,9 +106,6 @@ export const generatePDF = async (elementRef, filename = 'resume.pdf') => {
       heightLeft -= pageHeight;
     }
 
-    // Clean up the cloned content
-    document.body.removeChild(clonedContent);
-    
     // Save the PDF
     pdf.save(filename);
     

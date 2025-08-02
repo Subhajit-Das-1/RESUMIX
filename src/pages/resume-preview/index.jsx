@@ -133,8 +133,8 @@ const ResumePreview = () => {
       const lastName = resumeData?.personalInfo?.lastName || '';
       const filename = `${firstName}_${lastName}_Resume.pdf`.replace(/\s+/g, '_');
       
-      // Generate PDF by capturing the actual resume viewer
-      await generatePDF(resumeViewerRef, filename);
+      // Generate PDF using the data-based approach instead of capturing DOM
+      await generatePDFFromResumeData(resumeData, selectedTemplate, filename);
       
       // Show success message
       alert('Resume downloaded successfully!');
