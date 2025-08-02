@@ -196,7 +196,7 @@ export const generatePDFFromResumeData = async (resumeData, template = 'modern',
 };
 
 const generateResumeHTML = (resumeData, template) => {
-  const { personalInfo, experience, education, skills, summary } = resumeData;
+  const { personalInfo, experience, education, skills, summary, projects } = resumeData;
   
   let html = `
     <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px; background: white; min-height: 1000px;">
@@ -339,12 +339,45 @@ const generateResumeHTML = (resumeData, template) => {
     skills.forEach(skill => {
       html += `
         <span style="background: #f3f4f6; padding: 4px 8px; border-radius: 12px; font-size: 12px; color: #374151;">
-          ${skill.name || ''}
+          ${typeof skill === 'string' ? skill : skill.name || ''}
         </span>
       `;
     });
     
     html += `</div></div>`;
+  }
+  
+  if (projects && projects.length > 0) {
+    html += `
+      <div style="margin-bottom: 24px;">
+        <h2 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 600; color: #2563eb;">
+          Projects
+        </h2>
+    `;
+    
+    projects.forEach(project => {
+      html += `
+        <div style="margin-bottom: 16px;">
+          <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #111827;">
+            ${project.name || ''}
+          </h3>
+          <p style="margin: 0 0 8px 0; font-size: 12px; line-height: 1.5; color: #374151;">
+            ${project.description || ''}
+          </p>
+          ${project.technologies && project.technologies.length > 0 ? `
+            <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px;">
+              ${project.technologies.map(tech => `
+                <span style="background: #e5e7eb; padding: 2px 6px; border-radius: 8px; font-size: 10px; color: #6b7280;">
+                  ${tech}
+                </span>
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    });
+    
+    html += `</div>`;
   }
   
   html += `</div>`;
