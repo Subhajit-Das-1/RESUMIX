@@ -27,7 +27,7 @@ const FormNavigation = ({
   };
 
   return (
-    <div className="bg-card border-b border-border">
+    <div className="bg-card border-b border-border sticky top-16 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-4">
           {/* Progress Steps */}
@@ -67,14 +67,14 @@ const FormNavigation = ({
 
             {/* Mobile Steps */}
             <div className="sm:hidden flex items-center space-x-2">
-              <span className="text-sm font-medium text-muted-foreground">
+              <span className="text-sm font-medium text-primary">
                 Step {currentStep} of {totalSteps}
               </span>
               <div className="flex space-x-1">
                 {Array.from({ length: totalSteps }, (_, index) => (
                   <div
                     key={index}
-                    className={`w-2 h-2 rounded-full ${
+                    className={`w-3 h-3 rounded-full ${
                       index + 1 <= currentStep ? 'bg-primary' : 'bg-muted'
                     }`}
                   />
@@ -114,12 +114,13 @@ const FormNavigation = ({
               {currentStep < totalSteps ? (
                 <Button
                   variant="default"
-                  size="sm"
+                  size="default"
                   iconName="ChevronRight"
                   iconPosition="right"
                   onClick={onNext}
                   disabled={!canProceed}
                   loading={isNextLoading}
+                  className="min-w-[120px]"
                 >
                   <span className="hidden sm:inline">Next Step</span>
                   <span className="sm:hidden">Next</span>
@@ -127,12 +128,13 @@ const FormNavigation = ({
               ) : (
                 <Button
                   variant="success"
-                  size="sm"
+                  size="default"
                   iconName="Eye"
                   iconPosition="left"
                   onClick={onNext}
                   disabled={!canProceed}
                   loading={isNextLoading}
+                  className="min-w-[140px]"
                 >
                   <span className="hidden sm:inline">Preview Resume</span>
                   <span className="sm:hidden">Preview</span>

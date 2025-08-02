@@ -9,6 +9,7 @@ import SummaryStep from './components/SummaryStep';
 import ResumePreview from './components/ResumePreview';
 import FormNavigation from './components/FormNavigation';
 import MobilePreviewToggle from './components/MobilePreviewToggle';
+import Button from '../../components/ui/Button';
 import Icon from '../../components/AppIcon';
 
 const ResumeBuilderForm = () => {
@@ -335,6 +336,22 @@ const ResumeBuilderForm = () => {
         selectedTemplate={selectedTemplate}
         onTemplateChange={handleTemplateChange}
       />
+      
+      {/* Floating Navigation Button for Mobile */}
+      <div className="fixed bottom-6 left-6 z-50 md:hidden">
+        <Button
+          variant="default"
+          size="lg"
+          iconName="ChevronRight"
+          iconPosition="right"
+          onClick={handleNext}
+          disabled={!canProceed()}
+          loading={isNextLoading}
+          className="rounded-full shadow-floating"
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 };

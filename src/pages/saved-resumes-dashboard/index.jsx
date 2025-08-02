@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../../components/ui/Header';
 import DashboardNavigation from '../../components/ui/DashboardNavigation';
 import Button from '../../components/ui/Button';
+import { generatePDFFromResumeData } from '../../utils/pdfGenerator';
 
 import ResumeCard from './components/ResumeCard';
 import EmptyState from './components/EmptyState';
@@ -219,18 +220,17 @@ const SavedResumesDashboard = () => {
   const handleDownload = async (resumeId) => {
     setIsDownloading(true);
     try {
-      // Simulate download process
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // In a real app, this would trigger PDF generation and download
       const resume = resumes?.find(r => r?.id === resumeId);
       if (resume) {
-        // Create a temporary link to simulate download
-        const link = document.createElement('a');
-        link.href = '#';
-        link.download = `${resume?.title?.replace(/\s+/g, '_')}.pdf`;
-        link?.click();
+        // Generate filename
+        const filename = `${resume?.title?.replace(/\s+/g, '_')}.pdf`;
+        
+        // Generate PDF using resume data
+        await generatePDFFromResumeData(resume.data, resume.template || 'modern', filename);
       }
+    } catch (error) {
+      console.error('Download error:', error);
+      alert('Failed to download resume. Please try again.');
     } finally {
       setIsDownloading(false);
     }

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import PreviewHeader from './components/PreviewHeader';
 import ResumeViewer from './components/ResumeViewer';
 import LoadingState from './components/LoadingState';
 import EmptyState from './components/EmptyState';
+import { generatePDF } from '../../utils/pdfGenerator';
 
 const ResumePreview = () => {
   const [resumeData, setResumeData] = useState(null);
@@ -14,6 +15,7 @@ const ResumePreview = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isPrinting, setIsPrinting] = useState(false);
   const navigate = useNavigate();
+  const resumeViewerRef = useRef(null);
 
   // Mock resume data - in real app this would come from localStorage or API
   const mockResumeData = {
@@ -126,19 +128,15 @@ const ResumePreview = () => {
     setIsDownloading(true);
     
     try {
-      // Simulate PDF generation delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Generate filename based on user's name
+      const firstName = resumeData?.personalInfo?.firstName || '';
+      const lastName = resumeData?.personalInfo?.lastName || '';
+      const filename = `${firstName}_${lastName}_Resume.pdf`.replace(/\s+/g, '_');
       
-      // In a real app, this would generate and download the PDF
-      // For now, we'll just simulate the download
-      const link = document.createElement('a');
-      link.href = '#';
-      link.download = `${resumeData?.personalInfo?.fullName || 'Resume'}.pdf`;
-      document.body?.appendChild(link);
-      link?.click();
-      document.body?.removeChild(link);
+      // Generate PDF by capturing the actual resume viewer
+      await generatePDF(resumeViewerRef, filename);
       
-      // Show success message (in real app, use toast notification)
+      // Show success message
       alert('Resume downloaded successfully!');
     } catch (error) {
       console.error('Download error:', error);
@@ -245,14 +243,16 @@ const ResumePreview = () => {
         isDownloading={isDownloading}
         isPrinting={isPrinting}
       />
-      <ResumeViewer
-        resumeData={resumeData}
-        selectedTemplate={selectedTemplate}
-        onTemplateChange={handleTemplateChange}
-        zoomLevel={zoomLevel}
-        onZoomChange={handleZoomChange}
-        isPrintMode={isPrinting}
-      />
+      <div ref={resumeViewerRef}>
+        <ResumeViewer
+          resumeData={resumeData}
+          selectedTemplate={selectedTemplate}
+          onTemplateChange={handleTemplateChange}
+          zoomLevel={zoomLevel}
+          onZoomChange={handleZoomChange}
+          isPrintMode={isPrinting}
+        />
+      </div>
       {/* Print-only version */}
       <div className="print-only hidden">
         <ResumeViewer
