@@ -154,9 +154,8 @@ const CTASection = () => {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 1 }}
                   animate={{ y: [0, -5, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  transition={{ delay: 1, duration: 2, repeat: Infinity }}
                 >
                   🎉 Just got hired!
                 </motion.div>

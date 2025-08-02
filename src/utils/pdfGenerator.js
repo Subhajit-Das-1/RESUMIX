@@ -1,8 +1,28 @@
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+// Dynamic imports for client-side only libraries
+let jsPDF, html2canvas;
+
+// Load libraries only on client side
+const loadLibraries = async () => {
+  if (typeof window === 'undefined') return;
+  
+  if (!jsPDF) {
+    jsPDF = (await import('jspdf')).default;
+  }
+  if (!html2canvas) {
+    html2canvas = (await import('html2canvas')).default;
+  }
+};
 
 export const generatePDF = async (elementRef, filename = 'resume.pdf') => {
   try {
+    // Load libraries on client side
+    await loadLibraries();
+    
+    // Check if we're on client side
+    if (typeof window === 'undefined') {
+      throw new Error('PDF generation is only available on client side');
+    }
+    
     // Get the resume element
     const element = elementRef.current;
     if (!element) {
@@ -59,6 +79,14 @@ export const generatePDF = async (elementRef, filename = 'resume.pdf') => {
 
 export const generatePDFFromResumeData = async (resumeData, template = 'modern', filename = 'resume.pdf') => {
   try {
+    // Load libraries on client side
+    await loadLibraries();
+    
+    // Check if we're on client side
+    if (typeof window === 'undefined') {
+      throw new Error('PDF generation is only available on client side');
+    }
+    
     // Create a temporary container for the resume
     const container = document.createElement('div');
     container.style.position = 'absolute';

@@ -10,6 +10,15 @@ export default defineConfig({
   build: {
     outDir: "build",
     chunkSizeWarningLimit: 2000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          ui: ['framer-motion', 'lucide-react'],
+          pdf: ['jspdf', 'html2canvas']
+        }
+      }
+    }
   },
   plugins: [tsconfigPaths(), react(), tagger()],
   server: {
